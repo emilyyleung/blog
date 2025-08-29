@@ -1,9 +1,8 @@
 ---
-title: "Post 2"
+title: "Post 1"
 date: 2025-08-29
 project: "bragdocai"
 ---
-
 
 So it turns out that yesterday I had miscalculated the circumference of the curved image! 😅
 

@@ -1,0 +1,36 @@
+---
+import { getCollection, getEntry } from "astro:content";
+
+import Layout from "../../../layouts/Layout.astro";
+
+export async function getStaticPaths() {
+  // Get all project entries
+  const entries = await getCollection("projects");
+
+  return entries.map((entry) => ({
+    params: {
+      project: entry.slug.split("/")[0],
+      slug: entry.slug.split("/")[1],
+    }, // e.g., ["projectA","post-one"]
+  }));
+}
+
+const { project, slug } = Astro.params;
+
+// Load the entry
+const entry = await getEntry("projects", project + "/" + slug);
+
+if (!entry) {
+  throw new Error(`Post not found: ${slug}`);
+}
+
+// Render the content
+const { Content } = await entry.render();
+---
+
+<Layout title={entry.data.title || entry.slug}>
+  <article class="max-w-xl">
+    <h1>{entry.data.title || entry.slug}</h1>
+    <Content />
+  </article>
+</Layout>

@@ -1,0 +1,35 @@
+---
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("projects");
+
+  // Get unique project names
+  const projects = Array.from(
+    new Set(entries.map((entry) => entry.slug.split("/")[0]))
+  );
+
+  return projects.map((project) => ({
+    params: { project },
+  }));
+}
+
+const { project } = Astro.params;
+
+// Filter entries for this project
+const projectPosts = (await getCollection("projects")).filter(
+  (entry) => entry.slug.split("/")[0] === project
+);
+---
+
+<h1>Project: {project}</h1>
+
+<ul>
+  {
+    projectPosts.map((post) => (
+      <li>
+        <a href={`/projects/${post.slug}/`}>{post.data.title || post.slug}</a>
+      </li>
+    ))
+  }
+</ul>

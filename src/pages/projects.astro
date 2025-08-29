@@ -1,0 +1,22 @@
+---
+import { getCollection } from "astro:content";
+
+// Get all project entries
+const entries = await getCollection("projects");
+
+// Extract unique project names from the folder structure
+const projects = Array.from(
+  new Set(entries.map((entry) => entry.slug.split("/")[0]))
+);
+---
+
+<h1>Projects</h1>
+<ul>
+  {
+    projects.map((project) => (
+      <li>
+        <a href={`/projects/${project}/`}>{project}</a>
+      </li>
+    ))
+  }
+</ul>
