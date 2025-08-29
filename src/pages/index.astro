@@ -1,7 +1,8 @@
 ---
-import Layout from "../layouts/Layout.astro";
-
+import { format } from "date-fns";
 import { getCollection, getEntry } from "astro:content";
+
+import Layout from "../layouts/Layout.astro";
 
 const posts = await getCollection("projects");
 
@@ -27,7 +28,9 @@ const projects = [...new Set(posts.map((p) => p.data.project))];
         return (
           <div>
             <hr />
-            <div>{post.data.date}</div>
+            <div class="text-muted-foreground font-bold">
+              {format(post.data.date, "yyyy-MM-dd")}
+            </div>
             <Content />
           </div>
         );
