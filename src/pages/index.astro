@@ -1,11 +1,37 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import { getCollection, getEntry } from "astro:content";
+
+const posts = await getCollection("projects");
+
+// Sort by date descending
+const sorted = posts.sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+
+// Take latest 10
+const latest = sorted.slice(0, 10);
+
+// Unique list of projects
+const projects = [...new Set(posts.map((p) => p.data.project))];
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="Blog">
+  <div class="max-w-xl">
+    <h1>Blog</h1>
+    {
+      latest.map(async (post) => {
+        const entry = await getEntry("projects", post.slug);
+        const { Content } = await entry.render();
+        return (
+          <div>
+            <hr />
+            <div>{post.data.date}</div>
+            <Content />
+          </div>
+        );
+      })
+    }
+  </div>
 </Layout>
