@@ -29,7 +29,9 @@ const projects = [...new Set(posts.map((p) => p.data.project))];
           <div>
             <hr />
             <div class="text-muted-foreground font-bold">
-              {format(post.data.date, "yyyy-MM-dd")}
+              <a href={`/projects/${post.slug}`} class="no-underline">
+                {format(post.data.date, "yyyy-MM-dd")}
+              </a>
             </div>
             <Content />
           </div>
