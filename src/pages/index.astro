@@ -1,6 +1,7 @@
 ---
 import { format } from "date-fns";
 import { getCollection, getEntry } from "astro:content";
+import Feed from "../components/Feed";
 
 import Layout from "../layouts/Layout.astro";
 
@@ -21,7 +22,7 @@ const projects = [...new Set(posts.map((p) => p.data.project))];
 <Layout title="Blog">
   <div class="max-w-xl">
     <h1>Blog</h1>
-    {
+    <!-- {
       latest.map(async (post) => {
         const entry = await getEntry("projects", post.slug);
         const { Content } = await entry.render();
@@ -37,6 +38,8 @@ const projects = [...new Set(posts.map((p) => p.data.project))];
           </div>
         );
       })
-    }
+    } -->
+
+    <Feed client:load initialPosts={latest} allPosts={posts} />
   </div>
 </Layout>
