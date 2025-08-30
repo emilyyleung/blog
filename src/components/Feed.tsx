@@ -24,14 +24,14 @@ export default function Feed({initialPosts, allPosts}: FeedProps) {
     }
 
     return (
-        <div>
+        <div className="prose">
             {posts.map((post) => (
                 <article key={post.slug} className="feed-item">
                     <h3>{post.title}</h3>
                     <div>{post.data.date.toDateString()}</div>
                     <div dangerouslySetInnerHTML={{ __html: post.body }} />
                     <p>
-                        <a href={`/${post.project}/${post.slug}`}>View post</a>
+                        <a href={`/projects/${post.slug}`}>View post</a>
                     </p>
                 </article>
             ))}

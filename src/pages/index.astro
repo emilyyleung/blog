@@ -1,22 +1,40 @@
 ---
 import { format } from "date-fns";
-import { getCollection, getEntry } from "astro:content";
-import Feed from "../components/Feed";
+import { getCollection, getEntry, render } from "astro:content";
+// import Feed from "../components/Feed";
 
 import Layout from "../layouts/Layout.astro";
 
-const posts = await getCollection("projects");
+const rawPosts = await getCollection("projects");
 
 // Sort by date descending
-const sorted = posts.sort(
+const sorted = rawPosts.sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
 );
 
 // Take latest 10
-const latest = sorted.slice(0, 10);
+// const latest = sorted.slice(0, 10);
 
 // Unique list of projects
-const projects = [...new Set(posts.map((p) => p.data.project))];
+// const projects = [...new Set(posts.map((p) => p.data.project))];
+
+// For each post, get its rendered HTML
+const posts = [];
+for(let x = 0; x < rawPosts.length; x++) {
+  const post = rawPosts[x];
+  console.log( post.slug )
+  const entry = await getEntry("projects", post.slug)
+  const { Content } = await entry.render()
+
+  posts.push({
+    slug: entry.slug,
+    project: entry.data.project,
+    title: entry.data.title,
+    date: entry.data.date,
+    Content,
+  })
+}
+
 ---
 
 <Layout title="Blog">
@@ -40,6 +58,20 @@ const projects = [...new Set(posts.map((p) => p.data.project))];
       })
     } -->
 
-    <Feed client:load initialPosts={latest} allPosts={posts} />
+    {
+      posts.map((post) => (
+        <div key={post.slug}>
+          <hr />
+          <div class="text-muted-foreground font-bold">
+            <a href={`/projects/${post.slug}`} class="no-underline">
+              {format(post.date, "yyyy-MM-dd")}
+            </a>
+          </div>
+          <post.Content />
+        </div>
+      ))
+    }
+
+    <!-- <Feed client:load initialPosts={latest} allPosts={posts} /> -->
   </div>
 </Layout>
