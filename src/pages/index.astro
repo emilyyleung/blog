@@ -22,9 +22,10 @@ const sorted = rawPosts.sort(
 const posts = [];
 for(let x = 0; x < rawPosts.length; x++) {
   const post = rawPosts[x];
-  console.log( post.slug )
+  // console.log( post.slug )
   const entry = await getEntry("projects", post.slug)
-  const { Content } = await entry.render()
+  const entryData = await entry.render()
+  const { Content } = entryData 
 
   posts.push({
     slug: entry.slug,
