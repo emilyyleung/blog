@@ -1,45 +1,51 @@
-import {useState} from "react"
+import { useState, useEffect } from "react";
 
 export interface Post {
-    slug: string
-    project :string
-    title: string
-    date: Date
-    body: string
+  slug: string;
+  project: string;
+  title: string;
+  date: string;
+  html: string;
 }
 
-interface FeedProps {
-    initialPosts: Post[]
-    allPosts: Post[]
-}
+export default function Feed({ pageSize = 5 }: { pageSize?: number }) {
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [page, setPage] = useState(2);
 
-export default function Feed({initialPosts, allPosts}: FeedProps) {
-    const [posts, setPosts] = useState(initialPosts)
-    const [count, setCount] = useState(initialPosts.length)
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-    const loadMore = () => {
-        const next = allPosts.slice(count, count + 10)
-        setPosts([...posts, ...next])
-        setCount(count + next.length)
-    }
+  useEffect(() => {
+    setLoading(true);
 
-    return (
-        <div className="prose">
-            {posts.map((post) => (
-                <article key={post.slug} className="feed-item">
-                    <h3>{post.title}</h3>
-                    <div>{post.data.date.toDateString()}</div>
-                    <div dangerouslySetInnerHTML={{ __html: post.body }} />
-                    <p>
-                        <a href={`/projects/${post.slug}`}>View post</a>
-                    </p>
-                </article>
-            ))}
-            {
-                count < allPosts.length && (
-                    <button onClick={loadMore}>Load more</button>
-                )
-            }
-        </div>
-    )
+    fetch(`/api/posts.json?page=${page}&pageSize=${pageSize}`)
+      .then((res) => res.json())
+      .then((newPosts: Post[]) => {
+        if (newPosts.length === 0) {
+          setHasMore(false);
+        } else {
+          setPosts((prev) => [...prev, ...newPosts]);
+        }
+      })
+      .finally(() => setLoading(false));
+  }, [page]);
+
+  return (
+    <div>
+      {posts.length > 0 &&
+        posts.map((post, index) => {
+          return (
+            <article key={index}>
+              <h3>{post.title}</h3>
+              <time>{new Date(post.date).toDateString()}</time>
+              <div dangerouslySetInnerHTML={{ __html: post.html }} />
+            </article>
+          );
+        })}
+      {hasMore && !loading && (
+        <button onClick={() => setPage((p) => p + 1)}>Load more</button>
+      )}
+      {loading && <p>Loading...</p>}
+    </div>
+  );
 }

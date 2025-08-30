@@ -1,5 +1,5 @@
 ---
-title: "Post 2"
+title: "Post 7"
 date: 2025-08-20
 project: "bragdocai"
 ---

@@ -1,7 +1,7 @@
 ---
 import { format } from "date-fns";
 import { getCollection, getEntry, render } from "astro:content";
-// import Feed from "../components/Feed";
+import Feed from "../components/Feed";
 
 import Layout from "../layouts/Layout.astro";
 
@@ -19,23 +19,24 @@ const sorted = rawPosts.sort(
 // const projects = [...new Set(posts.map((p) => p.data.project))];
 
 // For each post, get its rendered HTML
-const posts = [];
-for(let x = 0; x < rawPosts.length; x++) {
-  const post = rawPosts[x];
-  // console.log( post.slug )
-  const entry = await getEntry("projects", post.slug)
-  const entryData = await entry.render()
-  const { Content } = entryData 
+// const posts = [];
+// for(let x = 0; x < rawPosts.length; x++) {
+//   const post = rawPosts[x];
+//   // console.log( post.slug )
+//   const entry = await getEntry("projects", post.slug)
+//   const entryData = await entry.render()
+//   const { Content } = entryData 
 
-  posts.push({
-    slug: entry.slug,
-    project: entry.data.project,
-    title: entry.data.title,
-    date: entry.data.date,
-    Content,
-  })
-}
+//   posts.push({
+//     slug: entry.slug,
+//     project: entry.data.project,
+//     title: entry.data.title,
+//     date: entry.data.date,
+//     Content,
+//   })
+// }
 
+const firstPosts = sorted.slice(0, 5);
 ---
 
 <Layout title="Blog">
@@ -59,7 +60,24 @@ for(let x = 0; x < rawPosts.length; x++) {
       })
     } -->
 
-    {
+    <!-- Static posts / First 10 -->
+     {
+      firstPosts.map(async(post, index) => {
+        const entry = await getEntry("projects", post.slug);
+        const { Content } = await entry.render();
+        return (
+          <article key={index}>
+            <h2>{post.data.title}</h2>
+            <p>{format(post.data.date, "yyyy-MM-dd")}</p>
+            <Content />
+          </article>
+        )
+      })
+     }
+
+     testing
+
+    <!-- {
       posts.map((post) => (
         <div key={post.slug}>
           <hr />
@@ -71,8 +89,8 @@ for(let x = 0; x < rawPosts.length; x++) {
           <post.Content />
         </div>
       ))
-    }
+    } -->
 
-    <!-- <Feed client:load initialPosts={latest} allPosts={posts} /> -->
+    <Feed client:load pageSize={5} />
   </div>
 </Layout>
