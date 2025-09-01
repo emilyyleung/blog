@@ -37,7 +37,9 @@ export default function Feed({ pageSize = 5 }: { pageSize?: number }) {
           return (
             <article key={index}>
               <hr />
-              <h2>{post.title}</h2>
+              <a href={`/projects/${post.slug}`}>
+                <h2>{post.title}</h2>
+              </a>
               <time>{new Date(post.date).toDateString()}</time>
               <div dangerouslySetInnerHTML={{ __html: post.html }} />
             </article>
