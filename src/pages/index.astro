@@ -42,23 +42,6 @@ const firstPosts = sorted.slice(0, 5);
 <Layout title="Blog">
   <div class="max-w-xl">
     <h1>Blog</h1>
-    <!-- {
-      latest.map(async (post) => {
-        const entry = await getEntry("projects", post.slug);
-        const { Content } = await entry.render();
-        return (
-          <div>
-            <hr />
-            <div class="text-muted-foreground font-bold">
-              <a href={`/projects/${post.slug}`} class="no-underline">
-                {format(post.data.date, "yyyy-MM-dd")}
-              </a>
-            </div>
-            <Content />
-          </div>
-        );
-      })
-    } -->
 
     <!-- Static posts / First 10 -->
      {
@@ -66,7 +49,7 @@ const firstPosts = sorted.slice(0, 5);
         const entry = await getEntry("projects", post.slug);
         const { Content } = await entry.render();
         return (
-          <article key={index}>
+          <article>
             <hr/>
             <h2>{post.data.title}</h2>
             <p>{format(post.data.date, "yyyy-MM-dd")}</p>
@@ -75,22 +58,6 @@ const firstPosts = sorted.slice(0, 5);
         )
       })
      }
-
-     testing
-
-    <!-- {
-      posts.map((post) => (
-        <div key={post.slug}>
-          <hr />
-          <div class="text-muted-foreground font-bold">
-            <a href={`/projects/${post.slug}`} class="no-underline">
-              {format(post.date, "yyyy-MM-dd")}
-            </a>
-          </div>
-          <post.Content />
-        </div>
-      ))
-    } -->
 
     <Feed client:load pageSize={5} />
   </div>
