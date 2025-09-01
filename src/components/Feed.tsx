@@ -36,12 +36,14 @@ export default function Feed({ pageSize = 5 }: { pageSize?: number }) {
         posts.map((post, index) => {
           return (
             <article key={index}>
+              <hr />
               <h3>{post.title}</h3>
               <time>{new Date(post.date).toDateString()}</time>
               <div dangerouslySetInnerHTML={{ __html: post.html }} />
             </article>
           );
         })}
+      <hr />
       {hasMore && !loading && (
         <button onClick={() => setPage((p) => p + 1)}>Load more</button>
       )}

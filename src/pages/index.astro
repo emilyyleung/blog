@@ -67,6 +67,7 @@ const firstPosts = sorted.slice(0, 5);
         const { Content } = await entry.render();
         return (
           <article key={index}>
+            <hr/>
             <h2>{post.data.title}</h2>
             <p>{format(post.data.date, "yyyy-MM-dd")}</p>
             <Content />
