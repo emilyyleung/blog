@@ -12,7 +12,7 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
-  output: "server",
+  output: "static",
   site: "https://emilyyleung.github.io",
   base: "/blog",
 });
