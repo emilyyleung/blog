@@ -13,4 +13,6 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
   output: "server",
+  site: "https://emilyyleung.github.io",
+  base: "/blog",
 });
