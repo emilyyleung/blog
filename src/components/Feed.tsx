@@ -37,7 +37,7 @@ export default function Feed({ pageSize = 5 }: { pageSize?: number }) {
           return (
             <article key={index}>
               <hr />
-              <a href={`/projects/${post.slug}`}>
+              <a href={`/blog/projects/${post.slug}`}>
                 <h2>{post.title}</h2>
               </a>
               <time>{new Date(post.date).toDateString()}</time>
