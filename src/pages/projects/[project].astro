@@ -28,7 +28,7 @@ const projectPosts = (await getCollection("projects")).filter(
   {
     projectPosts.map((post) => (
       <li>
-        <a href={`/projects/${post.slug}/`}>{post.data.title || post.slug}</a>
+        <a href={`/blog/projects/${post.slug}/`}>{post.data.title || post.slug}</a>
       </li>
     ))
   }
